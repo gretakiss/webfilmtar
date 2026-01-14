@@ -2,7 +2,8 @@
 <html lang="hu" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Kategóriák</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategóriák | Filmtár</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -25,41 +26,43 @@
             <h2>Új kategória</h2>
             <form action="/categories" method="post">
                 <label>
-                    Név
-                    <input name="name" required>
+                    Kategória neve
+                    <input name="name" placeholder="pl. Akció, Vígjáték..." required>
                 </label>
-                <button type="submit">Mentés</button>
+                <button type="submit">Kategória hozzáadása</button>
             </form>
         </section>
 
         <section class="card">
             <div class="pill">Összes kategória</div>
             <h2>Meglévő kategóriák</h2>
-            <table>
-                <thead>
-                <tr>
-                    <th>Név</th>
-                    <th>Műveletek</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="category : ${categories}">
-                    <td>
-                        <input name="name" th:value="${category.name}" th:attr="form=${'update-' + category.id}" required>
-                    </td>
-                    <td>
-                        <div class="inline-actions">
-                            <form th:id="${'update-' + category.id}" th:action="@{/categories/{id}/update(id=${category.id})}" method="post">
-                                <button type="submit">Módosítás</button>
-                            </form>
-                            <form th:action="@{/categories/{id}/delete(id=${category.id})}" method="post">
-                                <button type="submit">Törlés</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Név</th>
+                        <th>Műveletek</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="category : ${categories}">
+                        <td>
+                            <input name="name" th:value="${category.name}" th:attr="form=${'update-' + category.id}" required>
+                        </td>
+                        <td>
+                            <div class="inline-actions">
+                                <form th:id="${'update-' + category.id}" th:action="@{/categories/{id}/update(id=${category.id})}" method="post">
+                                    <button type="submit">Mentés</button>
+                                </form>
+                                <form th:action="@{/categories/{id}/delete(id=${category.id})}" method="post">
+                                    <button type="submit">Törlés</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </div>
 </main>
