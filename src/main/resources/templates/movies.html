@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Filmek</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header>
+  <div class="container">
+    <div>
+      <h1>Filmtár</h1>
+      <p class="subtitle">Filmek kezelése egyszerű, áttekinthető felületen.</p>
+    </div>
+    <nav>
+      <a class="active" href="/movies">Filmek</a>
+      <a href="/categories">Kategóriák</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container grid">
+    <section class="card">
+      <h2>Új film felvitele</h2>
+      <form action="/movies" method="post">
+        <label>
+          Cím
+          <input name="title" required>
+        </label>
+        <label>
+          Rendező
+          <input name="director" required>
+        </label>
+        <label>
+          Év
+          <input name="releaseYear" type="number" required>
+        </label>
+        <label>
+          Hossz (perc)
+          <input name="length" type="number" required>
+        </label>
+        <label>
+          Kategória
+          <select name="categoryId">
+            <option value="">Nincs</option>
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+          </select>
+        </label>
+        <button type="submit">Mentés</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="pill">Összes film</div>
+      <h2>Meglévő filmek</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Cím</th>
+          <th>Rendező</th>
+          <th>Év</th>
+          <th>Hossz</th>
+          <th>Kategória</th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="movie : ${movies}">
+          <td>
+            <input name="title" th:value="${movie.title}" th:attr="form=${'update-' + movie.id}" required>
+          </td>
+          <td>
+            <input name="director" th:value="${movie.director}" th:attr="form=${'update-' + movie.id}" required>
+          </td>
+          <td>
+            <input name="releaseYear" type="number" th:value="${movie.releaseYear}" th:attr="form=${'update-' + movie.id}" required>
+          </td>
+          <td>
+            <input name="length" type="number" th:value="${movie.length}" th:attr="form=${'update-' + movie.id}" required>
+          </td>
+          <td>
+            <select name="categoryId" th:attr="form=${'update-' + movie.id}">
+              <option value="">Nincs</option>
+              <option th:each="category : ${categories}"
+                      th:value="${category.id}"
+                      th:selected="${movie.category != null and category.id == movie.category.id}"
+                      th:text="${category.name}">
+              </option>
+            </select>
+          </td>
+          <td>
+            <div class="inline-actions">
+              <form th:id="${'update-' + movie.id}" th:action="@{/movies/{id}/update(id=${movie.id})}" method="post">
+                <button type="submit">Módosítás</button>
+              </form>
+              <form th:action="@{/movies/{id}/delete(id=${movie.id})}" method="post">
+                <button type="submit">Törlés</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</main>
+</body>
+</html>
